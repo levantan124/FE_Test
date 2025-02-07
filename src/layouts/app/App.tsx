@@ -93,6 +93,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       key: 'user-profile-link',
       label: 'profile',
       icon: <UserOutlined />,
+      onClick: () => navigate('/user-profile/details'),
     },
     {
       key: 'user-settings-link',
