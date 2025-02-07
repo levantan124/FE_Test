@@ -1,6 +1,6 @@
 // src\pages\details\EventDetailsPage.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
     Alert,
     Button,
@@ -16,25 +16,30 @@ import {
     Table,
     Tag,
     Typography,
+    Checkbox,
 } from 'antd';
-import { HomeOutlined, PieChartOutlined, UserAddOutlined } from '@ant-design/icons';
+import { HomeOutlined, PieChartOutlined, UserAddOutlined, DownloadOutlined } from '@ant-design/icons';
 import { DASHBOARD_ITEMS } from '../../constants';
-import { Link, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { PageHeader, Loader } from '../../components';
 import { useFetchData } from '../../hooks';
 import dayjs from 'dayjs';
-import authService from '../../services/authService'; // Import authService
-import { Events } from '../../types'; // Import Events type
+import authService from '../../services/authService';
+import { Events } from '../../types';
 
-const { Title, Text } = Typography;
+import { EventParticipantsTable } from '../dashboards/EventParticipantsTable';
+import jsPDF from 'jspdf';
+import { Helmet } from 'react-helmet-async';
+import { EventScheduleItem } from '../../types/schedule';
 
-const EventDetailsPage: React.FC = () => {
+const { Title, Text, Paragraph } = Typography;
+
+export const EventDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [eventDetails, setEventDetails] = useState<Events | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const [selectedSessionIds, setSelectedSessionIds] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchEventDetails = async () => {
@@ -42,7 +47,7 @@ const EventDetailsPage: React.FC = () => {
             setError(null);
             try {
                 const accessToken = localStorage.getItem('accessToken');
-                const response = await authService.getEventDetails(id) as { statusCode: number; data: { event: Events }; message: string };
+                const response = await authService.getEventDetails(id, accessToken || undefined) as { statusCode: number; data: { event: Events }; message: string };
                 if (response && response.statusCode === 200) {
                     setEventDetails(response.data.event);
                 } else {
@@ -76,7 +81,7 @@ const EventDetailsPage: React.FC = () => {
                 return;
             }
 
-            const response = await authService.registerEvent(eventDetails.id, [], accessToken) as { statusCode: number; message: string }; // sessionIds is empty array for now
+            const response = await authService.registerEvent(eventDetails.id, selectedSessionIds, accessToken) as { statusCode: number; message: string };
             if (response && response.statusCode === 201) {
                 message.success(response.message);
                 // Optionally redirect or update UI after successful registration
@@ -90,6 +95,46 @@ const EventDetailsPage: React.FC = () => {
             setLoading(false);
         }
     };
+
+    const handleDownloadPdf = async () => {
+        message.info("Download PDF function is not implemented yet for general events.");
+    };
+
+    const onSessionSelectChange = (selectedKeys: React.Key[]) => {
+        setSelectedSessionIds(selectedKeys as string[]);
+    };
+
+    const scheduleColumns = [
+        {
+            title: 'Title',
+            dataIndex: 'name', // Changed from 'title' to 'name' to match Events type
+            key: 'name'
+        },
+        {
+            title: 'Start Time',
+            dataIndex: 'startTime',
+            key: 'startTime',
+            render: (date: string) => dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+            title: 'End Time',
+            dataIndex: 'endTime',
+            key: 'endTime',
+            render: (date: string) => dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description'
+        },
+        {
+            title: 'Select Session',
+            key: 'select',
+            render: (_: any, record: EventScheduleItem) => (
+                <Checkbox value={record.id} />
+            ),
+        }
+    ];
 
 
     if (loading) {
@@ -171,25 +216,14 @@ const EventDetailsPage: React.FC = () => {
                         <Card title="Schedule">
                             {eventDetails.schedule && eventDetails.schedule.length > 0 ? (
                                 <Table
+                                    rowKey="id"
                                     dataSource={eventDetails.schedule}
-                                    columns={[
-                                        { title: 'Title', dataIndex: 'title', key: 'title' },
-                                        {
-                                            title: 'Start Time',
-                                            dataIndex: 'startTime',
-                                            key: 'startTime',
-                                            render: (date) => dayjs(date).format('YYYY-MM-DD HH:mm:ss'),
-                                        },
-                                        {
-                                            title: 'End Time',
-                                            dataIndex: 'endTime',
-                                            key: 'endTime',
-                                            render: (date) => dayjs(date).format('YYYY-MM-DD HH:mm:ss'),
-                                        },
-                                        { title: 'Description', dataIndex: 'description', key: 'description' },
-                                        // Add speaker names if available in your data
-                                    ]}
+                                    columns={scheduleColumns}
                                     pagination={false}
+                                    rowSelection={{
+                                        columnWidth: 80,
+                                        onChange: onSessionSelectChange,
+                                    }}
                                 />
                             ) : (
                                 <Alert message="No schedule available for this event." type="info" showIcon />
@@ -224,6 +258,17 @@ const EventDetailsPage: React.FC = () => {
                                         </List.Item>
                                     )}
                                 />
+                            </Card>
+                        </Col>
+                    )}
+                    {eventDetails?.status === 'FINISHED' && (
+                        <Col span={24}>
+                            <Card title="Participants Check-in/Check-out List"
+                                extra={<Button icon={<DownloadOutlined />} onClick={handleDownloadPdf} loading={loading} disabled={true}>
+                                    Download PDF
+                                </Button>}
+                            >
+                                <EventParticipantsTable eventId={id || ''} />
                             </Card>
                         </Col>
                     )}

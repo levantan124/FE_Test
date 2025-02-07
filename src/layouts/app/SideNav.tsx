@@ -73,6 +73,11 @@ const items: MenuProps['items'] = [
       null
     ),
     getItem(
+      <Link to={PATH_DASHBOARD.participated_events}>Participated Events</Link>, // Add participated events item
+      'participated-events',
+      null
+    ),
+    getItem(
       <Link to={PATH_DASHBOARD.users}>Users</Link>,
       'users',
       null
@@ -90,8 +95,8 @@ const items: MenuProps['items'] = [
       null
     ),
     getItem(
-      <Link to={PATH_DASHBOARD.logistics}>Logistics</Link>,
-      'logistics',
+      <Link to={PATH_DASHBOARD.speaker_guest}>Speaker & Guest</Link>,
+      'speakers-guests',
       null
     ),
   ]),

@@ -1,9 +1,11 @@
+// src\services\authService.ts
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080/api/v1/auth';
 const API_EVENT_BASE_URL = 'http://localhost:8080/api/v1/events';
-const API_CATEGORY_BASE_URL = 'http://localhost:8080/api/v1/categories'; // Define category base URL
-
+const API_CATEGORY_BASE_URL = 'http://localhost:8080/api/v1/categories';
+// Định nghĩa API cho participants
+const API_PARTICIPANTS_BASE_URL = 'http://localhost:8080/api/v1/participants';
 
 const authService = {
   login: async (credentials: any) => {
@@ -23,33 +25,19 @@ const authService = {
       throw error.response.data;
     }
   },
-  googleLogin: async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/google/login`);
-      const data = response.data as { url: string };
-      console.log(data.url);
-      return window.location.href = data.url;
-
-    } catch (error: any) {
-      throw error.response.data
-    }
-  },
   createEvent: async (eventData: any, accessToken: string) => {
     try {
-      const response = await axios.post(
-        `${API_EVENT_BASE_URL}`,
-        eventData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.post(`${API_EVENT_BASE_URL}`, eventData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       return response.data;
     } catch (error: any) {
       throw error.response.data;
     }
   },
+
   logout: async (accessToken: string) => {
     try {
       const response = await axios.post(
@@ -66,7 +54,8 @@ const authService = {
       throw error.response.data;
     }
   },
-  getCategories: async (accessToken: string) => { // Function to fetch categories
+
+  getCategories: async (accessToken: string) => {
     try {
       const response = await axios.get(`${API_CATEGORY_BASE_URL}`, {
         headers: {
@@ -78,42 +67,39 @@ const authService = {
       throw error.response.data;
     }
   },
-  createCategory: async (categoryData: any, accessToken: string) => { // Function to create a new category
+
+  createCategory: async (categoryData: any, accessToken: string) => {
     try {
-      const response = await axios.post(
-        `${API_CATEGORY_BASE_URL}`,
-        categoryData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error: any) {
-      throw error.response.data;
-    }
-  },
-  getEventDetails: async (eventId: string | undefined, accessToken?: string) => { // Function to fetch event details - accessToken is optional now
-    try {
-      const headers: any = { // Define headers as any to avoid type issues
-        'Content-Type': 'application/json',
-      };
-      if (accessToken) {
-        headers['Authorization'] = `Bearer ${accessToken}`;
-      }
-      const response = await axios.get(`${API_EVENT_BASE_URL}/${eventId}`, { // Pass headers in axios.get config
-        headers,
+      const response = await axios.post(`${API_CATEGORY_BASE_URL}`, categoryData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       return response.data;
     } catch (error: any) {
       throw error.response.data;
     }
   },
-  registerEvent: async (eventId: string, sessionIds: string[], accessToken: string) => { // Function to register for event
+
+  getEventDetails: async (eventId: string | undefined, accessToken?: string) => {
+    try {
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      const response = await axios.get(`${API_EVENT_BASE_URL}/${eventId}`, { headers });
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  registerEvent: async (eventId: string, sessionIds: string[], accessToken: string) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/participants`, // Correct endpoint for participant registration
+        `${API_PARTICIPANTS_BASE_URL}`, // Sử dụng endpoint cho participant registration
         { eventId, sessionIds },
         {
           headers: {
@@ -126,7 +112,34 @@ const authService = {
       throw error.response.data;
     }
   },
-  getOrganizedEvents: async (status?: string, accessToken?: string) => { // Function to fetch organized events, status is optional
+
+  deleteEvent: async (eventId: string, accessToken: string) => {
+    try {
+      const response = await axios.delete(`${API_EVENT_BASE_URL}/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  updateEvent: async (eventId: string, eventData: any, accessToken: string) => {
+    try {
+      const response = await axios.patch(`${API_EVENT_BASE_URL}/${eventId}`, eventData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  getOrganizedEvents: async (status?: string, accessToken?: string) => {
     try {
       const headers: any = {
         'Content-Type': 'application/json',
@@ -136,9 +149,171 @@ const authService = {
       }
       let url = `${API_EVENT_BASE_URL}/organized-events`;
       if (status) {
-        url += `?status=${status}`; // Append status query parameter if provided
+        url += `?status=${status}`;
       }
       const response = await axios.get(url, { headers });
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  uploadEventFiles: async (
+    eventId: string,
+    field: string,
+    formData: FormData,
+    accessToken: string
+  ) => {
+    try {
+      const response = await axios.post(
+        `${API_EVENT_BASE_URL}/events/${eventId}/files`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${accessToken}`,
+            field: field, // Truyền field vào header
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  getEventParticipants: async (eventId: string | undefined, accessToken?: string) => {
+    try {
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      const response = await axios.get(`${API_EVENT_BASE_URL}/${eventId}/participants`, { headers });
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  getParticipatedEvents: async (status?: string, accessToken?: string) => {
+    try {
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      let url = `${API_EVENT_BASE_URL}/participated-events`;
+      if (status && status !== 'all') {
+        url += `?status=${status}`;
+      }
+      const response = await axios.get(url, { headers });
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  // Hàm unregister (delete) participant event
+  unregisterEvent: async (participantId: string, accessToken: string) => {
+    try {
+      const response = await axios.delete(`${API_PARTICIPANTS_BASE_URL}/${participantId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  // Hàm update lại sessions của participant
+  updateParticipantSessions: async (
+    participantId: string,
+    sessionsData: any,
+    accessToken: string
+  ) => {
+    try {
+      const response = await axios.patch(
+        `${API_PARTICIPANTS_BASE_URL}/${participantId}`,
+        sessionsData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+  googleLogin: async () => { // Hàm googleLogin cho Server-Side Flow
+    try {
+      const response = await axios.get(`${API_BASE_URL}/google/login`);
+      const data = response.data as { url: string }; // Backend có thể trả về URL đăng nhập Google (tùy chọn)
+      window.location.href = data.url; // Chuyển hướng trình duyệt đến trang đăng nhập Google (nếu backend trả về url)
+      // Hoặc, nếu backend không trả về URL, bạn có thể chỉ cần:
+      // window.location.href = `${API_BASE_URL}/google/login`; // Chuyển hướng trực tiếp đến endpoint login của backend
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+  getTicketByParticipantId: async (participantId: string, accessToken?: string) => { // Add getTicketByParticipantId function
+    try {
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      const response = await axios.get(`${API_PARTICIPANTS_BASE_URL}/${participantId}/tickets`, { headers }); // Use correct endpoint
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+  getParticipantIdByUserIdEventId: async (eventId: string, accessToken?: string) => { // Updated function - Removed userId parameter
+    try {
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      const response = await axios.get(`${API_PARTICIPANTS_BASE_URL}/event/${eventId}/participant-id`, { headers }); // Updated API call - Removed userId from URL
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+  getUsers: async (accessToken?: string) => { // Hàm mới: Lấy danh sách users
+    try {
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      const response = await axios.get(`${API_BASE_URL}/users`, { headers }); // Gọi API /users
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  inviteUsersToEvent: async (eventId: string, users: { id: string, email: string }[], accessToken?: string) => { // Hàm mới: Mời users vào event
+    try {
+      const headers: any = {
+        'Content-Type': 'application/json',
+      };
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+      const response = await axios.post(`${API_EVENT_BASE_URL}/${eventId}/invite`, { users }, { headers }); // Gọi API /events/{eventId}/invite
       return response.data;
     } catch (error: any) {
       throw error.response.data;
