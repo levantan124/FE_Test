@@ -1,6 +1,5 @@
 export { HomePage } from './Home.tsx';
 export { SitemapPage } from './Sitemap.tsx';
-export { ReportPage } from './ReportPage.tsx';
 export * from './dashboards';
 export * from './corporate';
 export * from './userAccount';

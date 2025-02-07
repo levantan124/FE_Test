@@ -48,6 +48,9 @@ export const PATH_DASHBOARD = {
   participated_events: path(ROOTS_DASHBOARD, '/participated-events'),
   events_list: path(ROOTS_DASHBOARD, '/events-list'),
   speaker_guest: path(ROOTS_DASHBOARD, '/speakers-guests'),
+  report: path(ROOTS_DASHBOARD, '/report'),
+  timeline: path(ROOTS_DASHBOARD, '/timeline'),
+  participationStats: path(ROOTS_DASHBOARD, '/participation-stats'),
 };
 
 export const PATH_SITEMAP = {
@@ -89,6 +92,7 @@ export const PATH_USER_PROFILE = {
   help: path(ROOTS_PROFILE, '/help'),
   feedback: path(ROOTS_PROFILE, '/feedback'),
 };
+
 
 export const PATH_SOCIAL = {
   root: ROOTS_SOCIAL,

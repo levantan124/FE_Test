@@ -38,7 +38,8 @@ const DASHBOARD_ITEMS = [
   { title: 'logistics', path: PATH_DASHBOARD.logistics },
   { title: 'events', path: PATH_DASHBOARD.events },
   { title: 'my events', path: PATH_DASHBOARD.my_events },
-  { title: 'users', path: PATH_DASHBOARD.users },
+  { title: 'timeline', path: PATH_DASHBOARD.timeline },
+  { title: 'participation stats', path: PATH_DASHBOARD.participationStats },
 ];
 
 const CORPORATE_ITEMS = [
@@ -60,6 +61,7 @@ const USER_PROFILE_ITEMS = [
   { title: 'help', path: PATH_USER_PROFILE.help },
   { title: 'feedback', path: PATH_USER_PROFILE.feedback },
 ];
+
 
 const AUTHENTICATION_ITEMS = [
   { title: 'sign in', path: PATH_AUTH.signin },

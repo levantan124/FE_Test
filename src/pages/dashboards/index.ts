@@ -8,3 +8,4 @@ export { LearningDashboardPage } from './Learning.tsx';
 export { LogisticsDashboardPage } from './Logistics.tsx';
 export {MyEventDashboardPage} from './MyEvents.tsx';
 export {UserDashboardPage} from './Users.tsx';
+export {TimelinePage} from './TimelinePage.tsx';

@@ -53,6 +53,16 @@ const items: MenuProps['items'] = [
   getItem('Dashboards', 'dashboards', <PieChartOutlined />, [
     getItem(<Link to={PATH_DASHBOARD.default}>Default</Link>, 'default', null),
     getItem(
+      <Link to={PATH_DASHBOARD.timeline}>Timeline</Link>,
+      'timeline',
+      null
+    ),
+    getItem(
+      <Link to={PATH_DASHBOARD.participationStats}>Participation Stats</Link>,
+      'participation stats',
+      null
+    ),
+    getItem(
       <Link to={PATH_DASHBOARD.projects}>Projects</Link>,
       'projects',
       null
