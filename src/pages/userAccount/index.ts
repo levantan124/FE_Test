@@ -6,3 +6,4 @@ export { UserProfileActivityPage } from './Activity.tsx';
 export { UserProfileActionsPage } from './Actions.tsx';
 export { UserProfileHelpPage } from './Help.tsx';
 export { UserProfileFeedbackPage } from './Feedback.tsx';
+export { UserProfilePage } from './UserProfilePage.tsx';

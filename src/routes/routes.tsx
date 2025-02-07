@@ -39,6 +39,7 @@ import {
   DetailEventPage,
   MyEventDashboardPage,
   UserDashboardPage,
+  ReportPage,
 } from '../pages';
 import DetailMyEventPage from '../pages/details/MyEventPage'; 
 import {
@@ -180,6 +181,10 @@ const router = createBrowserRouter([
       {
         path: 'events-list',
         element: <EventsListPage />,
+      },
+      {
+        path: 'report', // Add the report route here
+        element: <ReportPage />,
       },
     ],
   },
