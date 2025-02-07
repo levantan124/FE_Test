@@ -1,3 +1,4 @@
+
 import type {
   Projects,
   ProjectCategory,
@@ -83,4 +84,79 @@ export interface Participants {
   checkInAt: string | null; // Có thể null nếu chưa check-in
   eventId: string;
   checkOutAt: string | null; // Có thể null nếu chưa check-out
+}
+
+export interface Speaker {
+  id?: string;
+  name: string;
+  bio?: string;
+  linkFb?: string; // Nếu có
+  avatar?: string; // Nếu có
+  email: string;
+  jobTitle?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Guest { // Add Guest interface
+  id?: string;
+  name: string;
+  jobTitle?: string;
+  organization?: string;
+  linkSocial?: string;
+  avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  email: string;
+}
+
+export interface SpeakerGuestData {
+  entityType: string;
+  id?: string;
+  name: string;
+  bio?: string;
+  linkFb?: string;
+  avatar?: string;
+  email: string;
+  jobTitle?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  organization?: string;
+  linkSocial?: string;
+}
+
+// src\types\index.ts
+
+export interface TicketType { // Example TicketType interface - adjust based on your actual backend DTO
+  id: string;
+  participantId: string;
+  qrCodeUrl: string;
+  status: string;
+  usedAt?: string | null;
+  // ... other ticket properties ...
+}
+
+export interface Participation { // Example Participation interface - adjust based on your actual backend DTO
+  id: string;
+  eventId: string;
+  userId: string;
+  sessionIds: string[];
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  checkedInAt?: string | null;
+  checkedOutAt?: string | null;
+  // ... other participation properties ...
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  phoneNumber?: string;
+  lastLoginAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  // ... các trường khác nếu có ...
 }

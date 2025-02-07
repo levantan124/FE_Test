@@ -1,3 +1,4 @@
+
 // src\redux\eventDetailsSlice.tsx
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Events } from '../types'; // Import your Events type

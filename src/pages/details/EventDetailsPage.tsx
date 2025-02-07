@@ -1,3 +1,4 @@
+
 // src\pages\details\EventDetailsPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -81,16 +82,16 @@ export const EventDetailsPage: React.FC = () => {
                 return;
             }
 
-            const response = await authService.registerEvent(eventDetails.id, selectedSessionIds, accessToken) as { statusCode: number; message: string; error?: string };
+            const response = await authService.registerEvent(eventDetails.id, selectedSessionIds, accessToken) as { statusCode: number; message: string };
             if (response && response.statusCode === 201) {
                 message.success(response.message);
                 // Optionally redirect or update UI after successful registration
             } else {
-                message.error(response?.error || 'Failed to register for event');
+                message.error(response?.message || 'Failed to register for event');
             }
         } catch (error: any) {
             console.error('Error registering for event:', error);
-            message.error(error?.error || 'Failed to register for event');
+            message.error(error.message || 'Failed to register for event');
         } finally {
             setLoading(false);
         }
@@ -277,5 +278,4 @@ export const EventDetailsPage: React.FC = () => {
         </div>
     );
 };
-
 export default EventDetailsPage;

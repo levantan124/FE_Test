@@ -1,3 +1,4 @@
+
 // src\components\dashboard\events\EventParticipantsTable.tsx
 import React from 'react';
 import { Table, TableProps, Alert } from 'antd';

@@ -1,5 +1,5 @@
 import { AppLayout } from '../index.ts';
-import { Col, Row } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { CiLocationOn, CiUser } from "react-icons/ci";
 import {
@@ -10,12 +10,14 @@ import { HomeOutlined, IdcardOutlined } from '@ant-design/icons';
 import { CORPORATE_ITEMS } from '../../constants';
 import { useStylesContext } from '../../context';
 
+const { Text, Title } = Typography;
 export const EventDetailLayout = () => {
   const { pathname } = useLocation();
   const stylesContext = useStylesContext();
 
   return (
     <>
+      {/*@ts-ignore*/}
       <AppLayout>
         <PageHeader
           title="Event Details"

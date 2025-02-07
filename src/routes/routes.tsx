@@ -1,6 +1,4 @@
-// src\routes\routes.tsx
 import { createBrowserRouter, useLocation } from 'react-router-dom';
-
 import {
   AccountDeactivePage,
   BiddingDashboardPage,
@@ -18,7 +16,6 @@ import {
   Error500Page,
   Error503Page,
   ErrorPage,
-  HomePage,
   MarketingDashboardPage,
   PasswordResetPage,
   ProjectsDashboardPage,
@@ -41,23 +38,29 @@ import {
   CreateEventPage,
   DetailEventPage,
   MyEventDashboardPage,
-  DetailMyEventPage,
   UserDashboardPage,
-  SpeakerFormPage,
-  UserProfilePage // import UserProfilePage
 } from '../pages';
+import DetailMyEventPage from '../pages/details/MyEventPage'; 
 import {
   CorporateLayout,
   DashboardLayout,
   EventDetailLayout,
-  GuestLayout,
+  // GuestLayout,
   UserAccountLayout,
 } from '../layouts';
 import React, { ReactNode, useEffect } from 'react';
 import { AboutPage } from '../pages/About.tsx';
 import EventsDashboardPage from '../pages/dashboards/Events.tsx';
+
+import EventsListPage from '../pages/dashboards/EventsList.tsx';
+import EventDetailsPage from '../pages/details/EventDetailsPage.tsx';
 import EditEventPage from '../pages/edit/EditEventPage.tsx';
 import ParticipatedEventsPage from '../pages/dashboards/ParticipatedEvents.tsx';
+import SpeakerManagementPage from '../pages/dashboards/SpeakerManagementPage.tsx';
+import SpeakerGuestManagementPage from '../pages/dashboards/SpeakerManagementPage.tsx';
+import GoogleAppwriteCallbackPage from '../pages/authentication/GoogleAppwriteCallbackPage.tsx';
+import EditEventPage from '../pages/edit/EditEventPage.tsx';
+
 
 // Custom scroll restoration function
 export const ScrollToTop: React.FC = () => {
@@ -92,7 +95,7 @@ const PageWrapper = ({ children }: PageProps) => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <PageWrapper children={<GuestLayout />} />,
+    // element: <PageWrapper children={<GuestLayout />} />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -115,7 +118,6 @@ const router = createBrowserRouter([
     ],
   },
   {
-    // details/events
     path: '/details',
     element: <PageWrapper children={<EventDetailLayout />} />,
     errorElement: <ErrorPage />,
@@ -123,12 +125,13 @@ const router = createBrowserRouter([
       {
         index: true,
         path: 'events/:id',
-        element: <DetailEventPage />,
+        element: <EventDetailsPage />,
       },
       {
         path: 'my-events/:id',
         element: <DetailMyEventPage />,
       },
+      
     ],
   },
   {
@@ -137,6 +140,14 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
        {
+        path: 'participated-events',  // Add route for participated events page
+        element: <ParticipatedEventsPage />,
+      },
+      {
+        path: 'speakers-guests', // Updated route path
+        element: <SpeakerGuestManagementPage />, // Use combined management page
+      },
+      {
         path: 'participated-events',  // Add route for participated events page
         element: <ParticipatedEventsPage />,
       },
@@ -166,28 +177,16 @@ const router = createBrowserRouter([
         element: <SocialDashboardPage />,
       },
       {
-        path: 'bidding',
-        element: <BiddingDashboardPage />,
-      },
-      {
-        path: 'learning',
-        element: <LearningDashboardPage />,
-      },
-      {
-        path: 'logistics',
-        element: <LogisticsDashboardPage />,
-      },
-      {
         path: 'my-events',
         element: <MyEventDashboardPage />,
       },
-      {
+       {
         path: 'users',
         element: <UserDashboardPage />,
       },
-       {
-        path: 'user-profile', // Add user profile route here
-        element: <UserProfilePage />,
+      {
+        path: 'events-list',
+        element: <EventsListPage />,
       },
     ],
   },
@@ -280,6 +279,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+        path: 'google/callback', // Route cho Google callback Appwrite
+        element: <GoogleAppwriteCallbackPage
+          projectId='123456789abc' // **Project ID Appwrite**
+          endpoint='https://cloud.appwrite.io/v1' // **Endpoint Appwrite Cloud**
+          redirectUri="http://localhost:5173/auth/google/callback" // **Callback URI của frontend**
+          onLoginSuccess={() => { /* Xử lý login thành công ở đây nếu cần */ }}
+          onLoginFailure={() => { /* Xử lý login thất bại ở đây nếu cần */ }}
+        />,
+      },
+      {
         path: 'signup',
         element: <SignUpPage />,
       },
@@ -360,10 +369,49 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        path: '',
-        element: <SpeakerFormPage />,
+        path: 'events/:id',
+        element: <EditEventPage />, // Use EditEventPage component
       },
     ],
   },
+  {
+    path: 'errors',
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path: '400',
+                element: <Error400Page />,
+            },
+            {
+                path: '403',
+                element: <Error403Page />,
+            },
+            {
+                path: '404',
+                element: <Error404Page />,
+            },
+            {
+                path: '500',
+                element: <Error500Page />,
+            },
+            {
+                path: '503',
+                element: <Error503Page />,
+            },
+        ],
+    },
+    {
+        path: '/about',
+        element: <PageWrapper children={<DashboardLayout />} />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                path: '',
+                element: <AboutPage />,
+            },
+        ],
+    },
 ]);
+
+export default router;

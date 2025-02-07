@@ -1,3 +1,4 @@
+
 // src\components\dashboard\events\MyEventTable.tsx
 import {
   Badge,
@@ -92,7 +93,7 @@ export const MyEventsTable = ({ data, loading, fetchData, activeTabKey, ...other
       render: (eventId: string, record: Events) => {
         return (
           <Space size="small">
-            <Button type="primary" onClick={() => navigate(`/details/events/${record.id}`)}> {/* Đã sửa URL navigate */}
+            <Button type="primary" onClick={() => navigate(`/details/my-events/${record.id}`)}> {/* Đã sửa URL navigate */}
               Details
             </Button>
             {activeTabKey !== 'CANCELED' && activeTabKey !== 'FINISHED' && (
