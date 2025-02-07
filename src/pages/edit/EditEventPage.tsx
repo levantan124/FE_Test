@@ -1,3 +1,4 @@
+
 // src\pages\edit\EditEventPage.tsx
 // src\pages\edit\EditEventPage.tsx
 import React, { useEffect, useState, useCallback } from 'react';
@@ -394,5 +395,6 @@ const EditEventPage: React.FC = () => {
         </div>
     );
 };
+
 
 export default EditEventPage;

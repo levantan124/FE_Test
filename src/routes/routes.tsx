@@ -51,6 +51,7 @@ import {
 import React, { ReactNode, useEffect } from 'react';
 import { AboutPage } from '../pages/About.tsx';
 import EventsDashboardPage from '../pages/dashboards/Events.tsx';
+
 import EventsListPage from '../pages/dashboards/EventsList.tsx';
 import EventDetailsPage from '../pages/details/EventDetailsPage.tsx';
 import EditEventPage from '../pages/edit/EditEventPage.tsx';
@@ -58,6 +59,8 @@ import ParticipatedEventsPage from '../pages/dashboards/ParticipatedEvents.tsx';
 import SpeakerManagementPage from '../pages/dashboards/SpeakerManagementPage.tsx';
 import SpeakerGuestManagementPage from '../pages/dashboards/SpeakerManagementPage.tsx';
 import GoogleAppwriteCallbackPage from '../pages/authentication/GoogleAppwriteCallbackPage.tsx';
+import EditEventPage from '../pages/edit/EditEventPage.tsx';
+
 
 // Custom scroll restoration function
 export const ScrollToTop: React.FC = () => {
@@ -97,8 +100,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        path: '',
-        element: <SignInPage />,
+        path: 'events/:id',
+        element: <EventDetailsPage />,
       },
     ],
   },
@@ -136,6 +139,10 @@ const router = createBrowserRouter([
     element: <PageWrapper children={<DashboardLayout />} />,
     errorElement: <ErrorPage />,
     children: [
+       {
+        path: 'participated-events',  // Add route for participated events page
+        element: <ParticipatedEventsPage />,
+      },
       {
         path: 'speakers-guests', // Updated route path
         element: <SpeakerGuestManagementPage />, // Use combined management page
@@ -309,6 +316,55 @@ const router = createBrowserRouter([
   },
   {
     path: '/edit', // Add route for edit event page
+    element: <PageWrapper children={<DashboardLayout />} />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: 'events/:id',
+        element: <EditEventPage />, // Use EditEventPage component
+      },
+    ],
+  },
+  {
+    path: 'errors',
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '400',
+        element: <Error400Page />,
+      },
+      {
+        path: '403',
+        element: <Error403Page />,
+      },
+      {
+        path: '404',
+        element: <Error404Page />,
+      },
+      {
+        path: '500',
+        element: <Error500Page />,
+      },
+      {
+        path: '503',
+        element: <Error503Page />,
+      },
+    ],
+  },
+  {
+    path: '/about',
+    element: <PageWrapper children={<DashboardLayout />} />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        path: '',
+        element: <AboutPage />,
+      },
+    ],
+  },
+   {
+    path: '/speaker-form', // add new route here
     element: <PageWrapper children={<DashboardLayout />} />,
     errorElement: <ErrorPage />,
     children: [

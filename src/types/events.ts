@@ -1,3 +1,4 @@
+
 import { EventScheduleItem } from "./schedule";
 
 export interface Events {

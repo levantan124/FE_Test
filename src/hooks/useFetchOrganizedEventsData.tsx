@@ -1,3 +1,4 @@
+
 // src\hooks\useFetchOrganizedEventsData.tsx
 import { useCallback, useEffect, useState } from 'react';
 import authService from '../services/authService';
@@ -35,5 +36,4 @@ const useFetchOrganizedEventsData = (status?: string) => { // status now is opti
 
     return { data, error, loading, fetchData }; // Return fetchData for refresh
 };
-
 export default useFetchOrganizedEventsData;
