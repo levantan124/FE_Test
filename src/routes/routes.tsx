@@ -53,6 +53,7 @@ import {
 import React, { ReactNode, useEffect } from 'react';
 import { AboutPage } from '../pages/About.tsx';
 import EventsDashboardPage from '../pages/dashboards/Events.tsx';
+
 import EventsListPage from '../pages/dashboards/EventsList.tsx';
 import EventDetailsPage from '../pages/details/EventDetailsPage.tsx';
 import EditEventPage from '../pages/edit/EditEventPage.tsx';
@@ -60,6 +61,8 @@ import ParticipatedEventsPage from '../pages/dashboards/ParticipatedEvents.tsx';
 import SpeakerManagementPage from '../pages/dashboards/SpeakerManagementPage.tsx';
 import SpeakerGuestManagementPage from '../pages/dashboards/SpeakerManagementPage.tsx';
 import GoogleAppwriteCallbackPage from '../pages/authentication/GoogleAppwriteCallbackPage.tsx';
+import EditEventPage from '../pages/edit/EditEventPage.tsx';
+
 
 // Custom scroll restoration function
 export const ScrollToTop: React.FC = () => {
@@ -99,8 +102,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        path: '',
-        element: <SignInPage />,
+        path: 'events/:id',
+        element: <EventDetailsPage />,
       },
     ],
   },
@@ -137,6 +140,10 @@ const router = createBrowserRouter([
     element: <PageWrapper children={<DashboardLayout />} />,
     errorElement: <ErrorPage />,
     children: [
+       {
+        path: 'participated-events',  // Add route for participated events page
+        element: <ParticipatedEventsPage />,
+      },
       {
         path: 'speakers-guests', // Updated route path
         element: <SpeakerGuestManagementPage />, // Use combined management page

@@ -1,3 +1,4 @@
+
 // src\hooks\useFetchParticipatedEventsData.tsx
 import { useCallback, useEffect, useState } from 'react';
 import authService from '../services/authService';

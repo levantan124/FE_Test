@@ -1,3 +1,4 @@
+
 function path(root: string, sublink: string) {
   return `${root}${sublink}`;
 }
@@ -46,9 +47,7 @@ export const PATH_DASHBOARD = {
   my_events : path(ROOTS_DASHBOARD, '/my-events'),
   users : path(ROOTS_DASHBOARD, '/users'),
   participated_events: path(ROOTS_DASHBOARD, '/participated-events'),
-  events_list: path(ROOTS_DASHBOARD, '/events-list'),
   speaker_guest: path(ROOTS_DASHBOARD, '/speakers-guests'),
-  report: path(ROOTS_DASHBOARD, '/report'),
   timeline: path(ROOTS_DASHBOARD, '/timeline'),
   participationStats: path(ROOTS_DASHBOARD, '/participation-stats'),
 };

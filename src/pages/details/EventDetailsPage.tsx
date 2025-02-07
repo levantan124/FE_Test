@@ -1,3 +1,4 @@
+
 // src\pages\details\EventDetailsPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -277,5 +278,4 @@ export const EventDetailsPage: React.FC = () => {
         </div>
     );
 };
-
 export default EventDetailsPage;
